@@ -1,4 +1,4 @@
-package com.yuegod.chat.db.mongo;
+package com.yuegod.chat.db.mongo.entity;
 
 import java.time.LocalDateTime;
 import lombok.Data;
@@ -15,8 +15,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
  */
 @Data
 @Accessors(chain = true)
-@Document("user_message")
-public class UserMessage {
+@Document("user_msg")
+public class UserMsg {
 
   @Id private String id;
 
@@ -24,11 +24,6 @@ public class UserMessage {
   @Field("from_id")
   @Indexed
   private String fromId;
-
-  /** 接收用户 */
-  @Field("to_id")
-  @Indexed
-  private String toId;
 
   /** 内容 */
   @Field("content")

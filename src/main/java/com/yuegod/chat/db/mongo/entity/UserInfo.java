@@ -1,4 +1,4 @@
-package com.yuegod.chat.db.mongo;
+package com.yuegod.chat.db.mongo.entity;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
