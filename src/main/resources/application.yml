@@ -1,0 +1,23 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: chat-ai-agent
+  data:
+    redis:
+      host: 1.14.93.237
+      port: 6937
+      database: 0
+      password: quziwei123
+    mongodb:
+      uri: mongodb://1.14.93.237:27018/chat_ai_agent
+      authentication-database: admin
+      username: quziwei
+      password: quziwei123
+  ai:
+    openai:
+      api-key: sk-k9E4K5jrVrtfxOPtNqVMxlUGZY5s7pRmvv3Xo0Vanngn8irq
+      base-url: https://api.xty.app
+      chat:
+        options:
+          model: gpt-3.5-turbo

@@ -28,6 +28,7 @@ public class RedissonConfig {
     config
         .useSingleServer()
         .setAddress("redis://" + redisProperties.getHost() + ":" + redisProperties.getPort())
+        .setPassword(redisProperties.getPassword())
         .setConnectionPoolSize(500)
         .setSubscriptionConnectionPoolSize(redisProperties.getJedis().getPool().getMaxActive())
         .setIdleConnectionTimeout(30000)
