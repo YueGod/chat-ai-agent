@@ -21,6 +21,9 @@ public class UserInfo {
   @Field("name")
   private String name;
 
+  @Field("user_flag")
+  private String userFlag;
+
   /** 年龄 */
   @Field("age")
   private Integer age;

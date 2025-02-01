@@ -5,7 +5,6 @@ import com.yuegod.chat.db.mongo.entity.UserMsg;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +21,7 @@ public class ChatRspAgent {
 
   private final ChatModel chatModel;
 
-  public String request(Message message) {
+  public String request(String message) {
     log.info("发送消息：{}", message);
     return chatModel.call(message);
   }
@@ -35,7 +34,7 @@ public class ChatRspAgent {
               你的交流风格轻松、幽默、自然，不显得刻意或生硬，避免机械化问答模式，而是以 **对话节奏** 引导话题深入发展。
 
               ### **用户信息**
-              - **昵称**：{user_name}
+              - **姓名**：{user_name}
               - **城市**：{user_city}
               - **职业**：{user_profession}
               - **兴趣爱好**：{user_hobbies}

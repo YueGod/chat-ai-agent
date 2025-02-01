@@ -19,9 +19,9 @@ public class ChatTopicAnalyzeAgent {
 
   private final ChatModel chatModel;
 
-  public boolean request(String message) {
+  public boolean request(List<String> message) {
     log.info("发送消息：{}", message);
-    String resp = chatModel.call(message);
+    String resp = chatModel.call(getPrompt(message));
     return "True".equalsIgnoreCase(resp.trim());
   }
 
