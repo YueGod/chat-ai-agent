@@ -79,7 +79,7 @@ public class ChatRspAgent {
         .replace("{user_last_message}", lastMsg.getContent())
         .replace(
             "{chat_history}",
-            String.join("\n", chatHistory.stream().map(UserMsg::getContent).toList()))
+            String.join("\n-", chatHistory.stream().map(UserMsg::getContent).toList()))
         .replace("{user_tone}", lastMsg.getTone())
         .replace("{is_same_topic}", String.valueOf(topic));
   }
