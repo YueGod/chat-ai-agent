@@ -45,10 +45,10 @@ public class ChatRspAgent {
 
               ### **当前聊天背景**
               - **用户最近发送的消息**：{user_last_message}
-              - **聊天上下文**：
+              - **聊天上下文以及历史语气**：
                 - 最近对话记录：
                   {chat_history}
-                - **对方的语气风格**：{user_tone}
+                - **对方的当前语气风格**：{user_tone}
                 - **当前对话是否围绕同一主题**：{is_same_topic}
 
               ### **对话策略**
@@ -71,6 +71,9 @@ public class ChatRspAgent {
               ### **输出格式**
               - **直接告诉我要回复的文本内容，且去除掉多余的标点符号，只保留需要的**
               """;
+
+    String chatHistoryStr = chatHistory.stream().map(e -> "\n-"+"语气:"+e.getTone()+" 内容:"+e.getContent())
+            .reduce("", String::concat);
     return prompts
         .replace("{user_name}", userInfo.getName())
         .replace("{user_city}", userInfo.getCity())
@@ -79,8 +82,7 @@ public class ChatRspAgent {
         .replace("{user_preferences}", userInfo.getPreferences())
         .replace("{user_last_message}", lastMsg.getContent())
         .replace(
-            "{chat_history}",
-            String.join("\n-", chatHistory.stream().map(UserMsg::getContent).toList()))
+            "{chat_history}",chatHistoryStr)
         .replace("{user_tone}", lastMsg.getTone())
         .replace("{is_same_topic}", String.valueOf(topic));
   }
