@@ -1,5 +1,6 @@
 package com.yuegod.chat.model;
 
+import com.yuegod.chat.db.mongo.entity.UserInfo;
 import com.yuegod.chat.db.mongo.entity.UserMsg;
 import java.util.List;
 import lombok.Data;
@@ -14,10 +15,22 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class ChatRspPrompt {
+  /** 用户信息 */
+  private UserInfo userInfo;
+
+  /** 对话历史 */
   private List<UserMsg> conversationHistory;
+
+  /** 当前用户消息 */
   private String currentMessage;
+
+  /** 当前消息是否包含个人信息 */
   private boolean isPersonalInfoInMessage;
+
+  /** 响应指导 */
   private ResponseGuidelines responseGuidelines;
+
+  /** 对话策略 */
   private DialogStrategy dialogStrategy;
 
   @Data
