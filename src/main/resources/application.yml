@@ -20,4 +20,4 @@ spring:
       base-url: https://api.xty.app
       chat:
         options:
-          model: gpt-3.5-turbo
+          model: gpt-3.5-turbo-16k-0613

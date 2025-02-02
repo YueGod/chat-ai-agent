@@ -6,6 +6,7 @@ import com.yuegod.chat.agent.ChatTopicAnalyzeAgent;
 import com.yuegod.chat.db.mongo.entity.UserInfo;
 import com.yuegod.chat.db.mongo.entity.UserMsg;
 import com.yuegod.chat.domain.resp.CreateChatResp;
+import com.yuegod.chat.model.ChatRspPrompt;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -43,19 +44,21 @@ public class ChatService {
     boolean topic = false;
     // 获取回复
     String prompts = chatRspAgent.getPrompts(userInfo, lastMsg, chatHistory, chatHistory, topic);
-    String resp = chatRspAgent.request(prompts, "hi");
+    ChatRspPrompt resp = chatRspAgent.request(prompts, "hi");
     log.info("回复：{}", resp);
-    return new CreateChatResp().setUserId(userInfo.getId()).setContent(resp);
+    return new CreateChatResp().setUserId(userInfo.getId()).setContent(resp.getContent());
   }
 
   /** 用户发送消息 */
-  public String sendMsg(String userFlag, String message) {
+  public ChatRspPrompt sendMsg(String userFlag, String message) {
     // 获取用户信息
     UserInfo userInfo = userInfoService.getUserInfo(userFlag);
     // 获取用户最近的消息
     UserMsg lastMsg = new UserMsg().setContent(message);
     // 获取用户的聊天记录
     List<UserMsg> chatHistory = userMsgService.getChatHistory(userFlag);
+    // 我回复的聊天记录
+    List<UserMsg> chatHistoryReply = userMsgService.getChatHistoryReply(userFlag);
     // 获取用户语气
     String chatTone =
         chatToneAnalyzeAgent.request(chatHistory.stream().map(UserMsg::getContent).toList());
@@ -64,8 +67,9 @@ public class ChatService {
     boolean topic =
         chatTopicAnalyzeAgent.request(chatHistory.stream().map(UserMsg::getContent).toList());
     // 获取回复
-    String prompts = chatRspAgent.getPrompts(userInfo, lastMsg, chatHistory, chatHistory, topic);
-    String resp = chatRspAgent.request(prompts, message);
+    String prompts =
+        chatRspAgent.getPrompts(userInfo, lastMsg, chatHistory, chatHistoryReply, topic);
+    ChatRspPrompt resp = chatRspAgent.request(prompts, message);
     log.info("回复：{}", resp);
     // 保存用户聊天信息
     userMsgService.save(userInfo, message);

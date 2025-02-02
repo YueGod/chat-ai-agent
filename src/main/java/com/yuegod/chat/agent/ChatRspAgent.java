@@ -1,7 +1,9 @@
 package com.yuegod.chat.agent;
 
+import com.alibaba.fastjson2.JSON;
 import com.yuegod.chat.db.mongo.entity.UserInfo;
 import com.yuegod.chat.db.mongo.entity.UserMsg;
+import com.yuegod.chat.model.ChatRspPrompt;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -23,9 +25,10 @@ public class ChatRspAgent {
 
   private final ChatModel chatModel;
 
-  public String request(String prompt, String message) {
+  public ChatRspPrompt request(String prompt, String message) {
     log.info("发送消息：{}", prompt);
-    return chatModel.call(prompt);
+    String respStr = chatModel.call(prompt);
+    return JSON.parseObject(respStr, ChatRspPrompt.class);
   }
 
   public String getPrompts(
@@ -60,8 +63,8 @@ public class ChatRspAgent {
               ### **对话策略**
               1. **保持对话节奏**
                  - **如果对方的平均回复字数较长（> 15 字）**，则你的回复可以相对完整，**但不应超过对方的回复长度**。
-                 - **你回复的对话需要根据对方的语气来进行调整**。
                  - **如果对方回复较短（<= 5 字）**，减少回复长度，跟随对方节奏，甚至使用简短的单词或表情式语气（如 "哈哈"、"确实"）。
+                 - **聊天初期应该避免回复过长文字，应该精简且字数要应该控制在5-10字左右。
               2. **智能话题管理**
                  - **如果最近 3 条对话围绕同一话题，且对方回复字数逐渐减少**（例："嗯"、"哈哈"、"哦"），则自动切换到新的相关话题。
                  - **如果对方仍然表现出兴趣（回复完整且主动提问，并且语气处在积极状态并不是消极对话）**，继续深化当前话题。
@@ -116,6 +119,10 @@ public class ChatRspAgent {
 
     String chatHistoryStr = chatHistory.stream().map(e -> "\n-"+"语气:"+e.getTone()+" 内容:"+e.getContent())
             .reduce("", String::concat);
+    String chatHistoryReplyStr =
+        chatHistoryReply.stream()
+            .map(e -> "\n-" + "内容:" + e.getContent())
+            .reduce("", String::concat);
     return prompts
         .replace("{user_name}", userInfo.getName())
         .replace("{user_city}", userInfo.getCity())
@@ -124,6 +131,7 @@ public class ChatRspAgent {
         .replace("{user_preferences}", userInfo.getPreferences())
         .replace("{user_last_message}", lastMsg.getContent())
         .replace("{chat_history_send}", chatHistoryStr)
+        .replace("{chat_history_reply}", chatHistoryReplyStr)
         .replace("{user_tone}", lastMsg.getTone())
         .replace("{is_same_topic}", String.valueOf(topic));
   }

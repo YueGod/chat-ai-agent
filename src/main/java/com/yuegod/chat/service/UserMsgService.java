@@ -24,4 +24,8 @@ public class UserMsgService {
   }
 
   public void save(UserInfo userInfo, String resp) {}
+
+  public List<UserMsg> getChatHistoryReply(String userFlag) {
+    return null;
+  }
 }
