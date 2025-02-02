@@ -40,9 +40,10 @@ public class ChatPromptsTest {
     List<UserMsg> conversationHistory =
         List.of(
             new UserMsg().setTone("友好、打招呼").setContent("hi"),
-            new UserMsg().setTone("友好、打招呼").setContent("没怎么"));
+            new UserMsg().setTone("敷衍").setContent("没怎么"),
+            new UserMsg().setTone("敷衍").setContent("耍手机"));
     // 模拟消息
-    UserMsg currentMessage = UserMsg.empty(userInfo.getId()).setContent("没怎么");
+    UserMsg currentMessage = UserMsg.empty(userInfo.getId()).setContent("就刷刷视频啦");
     String prompts = chatRspAgent.getPrompts(userInfo, currentMessage, conversationHistory, true);
     System.out.println(prompts);
     String resp = chatRspAgent.request(prompts, currentMessage.getContent());
