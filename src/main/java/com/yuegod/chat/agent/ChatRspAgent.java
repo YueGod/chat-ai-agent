@@ -29,7 +29,11 @@ public class ChatRspAgent {
   }
 
   public String getPrompts(
-      UserInfo userInfo, UserMsg lastMsg, List<UserMsg> chatHistory,List<UserMsg> chatHistoryReply, boolean topic) {
+      UserInfo userInfo,
+      UserMsg lastMsg,
+      List<UserMsg> chatHistory,
+      List<UserMsg> chatHistoryReply,
+      boolean topic) {
     String prompts =
         """
               你是一名智能聊天助手，目标是在社交应用中与用户进行自然、有趣且流畅的对话。
@@ -119,8 +123,7 @@ public class ChatRspAgent {
         .replace("{user_hobbies}", userInfo.getHobbies())
         .replace("{user_preferences}", userInfo.getPreferences())
         .replace("{user_last_message}", lastMsg.getContent())
-        .replace(
-            "{chat_history_send}",chatHistoryStr)
+        .replace("{chat_history_send}", chatHistoryStr)
         .replace("{user_tone}", lastMsg.getTone())
         .replace("{is_same_topic}", String.valueOf(topic));
   }

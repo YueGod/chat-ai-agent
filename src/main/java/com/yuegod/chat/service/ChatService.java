@@ -42,7 +42,7 @@ public class ChatService {
     // 获取当前对话是否围绕同一主题
     boolean topic = false;
     // 获取回复
-    String prompts = chatRspAgent.getPrompts(userInfo, lastMsg, chatHistory,chatHistory, topic);
+    String prompts = chatRspAgent.getPrompts(userInfo, lastMsg, chatHistory, chatHistory, topic);
     String resp = chatRspAgent.request(prompts, "hi");
     log.info("回复：{}", resp);
     return new CreateChatResp().setUserId(userInfo.getId()).setContent(resp);
@@ -64,7 +64,7 @@ public class ChatService {
     boolean topic =
         chatTopicAnalyzeAgent.request(chatHistory.stream().map(UserMsg::getContent).toList());
     // 获取回复
-    String prompts = chatRspAgent.getPrompts(userInfo, lastMsg, chatHistory,chatHistory, topic);
+    String prompts = chatRspAgent.getPrompts(userInfo, lastMsg, chatHistory, chatHistory, topic);
     String resp = chatRspAgent.request(prompts, message);
     log.info("回复：{}", resp);
     // 保存用户聊天信息

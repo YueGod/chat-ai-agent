@@ -41,11 +41,12 @@ public class ChatPromptsTest {
         List.of(
             new UserMsg().setTone("友好").setContent("就刷刷视频啦"),
             new UserMsg().setTone("敷衍").setContent("哦哦"),
-            new UserMsg().setTone("敷衍").setContent("就抖音啊")
-        );
+            new UserMsg().setTone("敷衍").setContent("就抖音啊"));
     // 模拟消息
     UserMsg currentMessage = UserMsg.empty(userInfo.getId()).setContent("没有");
-    String prompts = chatRspAgent.getPrompts(userInfo, currentMessage, conversationHistory, conversationHistory,true);
+    String prompts =
+        chatRspAgent.getPrompts(
+            userInfo, currentMessage, conversationHistory, conversationHistory, true);
     System.out.println(prompts);
     String resp = chatRspAgent.request(prompts, currentMessage.getContent());
     System.out.println(resp);
