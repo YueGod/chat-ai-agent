@@ -4,7 +4,8 @@ import com.yuegod.chat.db.mongo.entity.UserInfo;
 import com.yuegod.chat.db.mongo.entity.UserMsg;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +17,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ChatRspAgent {
+
+  private static final Logger log = LoggerFactory.getLogger(ChatRspAgent.class);
 
   private final ChatModel chatModel;
 
