@@ -42,4 +42,8 @@ public class UserMsg {
   @Indexed(expireAfterSeconds = 60 * 60 * 24 * 30)
   @CreatedDate
   private LocalDateTime createTime;
+
+  public static UserMsg empty(String fromId) {
+    return new UserMsg().setFromId(fromId).setTone("未知").setTopic("未知").setContent("无");
+  }
 }

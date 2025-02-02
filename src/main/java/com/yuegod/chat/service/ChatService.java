@@ -36,7 +36,7 @@ public class ChatService {
     // 获取用户信息
     UserInfo userInfo = userInfoService.createUser(userFlag);
     // 获取用户最近的消息
-    UserMsg lastMsg = new UserMsg();
+    UserMsg lastMsg = UserMsg.empty(userInfo.getId());
     // 获取用户的聊天记录
     List<UserMsg> chatHistory = Collections.emptyList();
     // 获取当前对话是否围绕同一主题
@@ -45,8 +45,6 @@ public class ChatService {
     String prompts = chatRspAgent.getPrompts(userInfo, lastMsg, chatHistory, topic);
     String resp = chatRspAgent.request(prompts);
     log.info("回复：{}", resp);
-    // 保存用户聊天信息
-    userMsgService.save(userInfo, resp);
     return new CreateChatResp().setUserId(userInfo.getId()).setContent(resp);
   }
 
@@ -58,6 +56,10 @@ public class ChatService {
     UserMsg lastMsg = new UserMsg().setContent(message);
     // 获取用户的聊天记录
     List<UserMsg> chatHistory = userMsgService.getChatHistory(userFlag);
+    // 获取用户语气
+    String chatTone =
+        chatToneAnalyzeAgent.request(chatHistory.stream().map(UserMsg::getContent).toList());
+    lastMsg.setTone(chatTone);
     // 获取当前对话是否围绕同一主题
     boolean topic =
         chatTopicAnalyzeAgent.request(chatHistory.stream().map(UserMsg::getContent).toList());
@@ -66,7 +68,7 @@ public class ChatService {
     String resp = chatRspAgent.request(prompts);
     log.info("回复：{}", resp);
     // 保存用户聊天信息
-    userMsgService.save(userInfo, resp);
+    userMsgService.save(userInfo, message);
     return resp;
   }
 }
