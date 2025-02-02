@@ -17,5 +17,7 @@ public class UserInfoService {
     return null;
   }
 
-  public UserInfo createUser(String userFlag) {}
+  public UserInfo createUser(String userFlag) {
+    return new UserInfo();
+  }
 }

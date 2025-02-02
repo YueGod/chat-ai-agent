@@ -23,9 +23,9 @@ public class ChatRspAgent {
 
   private final ChatModel chatModel;
 
-  public String request(String message) {
-    log.info("发送消息：{}", message);
-    return chatModel.call(message);
+  public String request(String prompt, String message) {
+    log.info("发送消息：{}", prompt);
+    return chatModel.call(prompt);
   }
 
   public String getPrompts(

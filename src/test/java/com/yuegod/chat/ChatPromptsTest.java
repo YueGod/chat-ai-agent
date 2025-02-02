@@ -1,12 +1,13 @@
 package com.yuegod.chat;
 
 import com.alibaba.fastjson2.JSON;
+import com.yuegod.chat.agent.ChatRspAgent;
 import com.yuegod.chat.db.mongo.entity.UserInfo;
 import com.yuegod.chat.db.mongo.entity.UserMsg;
 import com.yuegod.chat.model.ChatRspPrompt;
 import jakarta.annotation.Resource;
-import java.util.Collections;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
@@ -18,9 +19,35 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @since 2025/2/2
  */
 @SpringBootTest(classes = Application.class)
+@Slf4j
 public class ChatPromptsTest {
 
   @Resource private ChatModel chatModel;
+
+  @Resource private ChatRspAgent chatRspAgent;
+
+  @Test
+  public void test2() {
+    // 模拟用户信息
+    UserInfo userInfo =
+        new UserInfo()
+            .setName("未知")
+            .setCity("未知")
+            .setProfession("未知")
+            .setHobbies("未知")
+            .setPreferences("未知");
+    // 模拟对话历史
+    List<UserMsg> conversationHistory =
+        List.of(
+            new UserMsg().setTone("友好、打招呼").setContent("hi"),
+            new UserMsg().setTone("友好、打招呼").setContent("没怎么"));
+    // 模拟消息
+    UserMsg currentMessage = UserMsg.empty(userInfo.getId()).setContent("没怎么");
+    String prompts = chatRspAgent.getPrompts(userInfo, currentMessage, conversationHistory, true);
+    System.out.println(prompts);
+    String resp = chatRspAgent.request(prompts, currentMessage.getContent());
+    System.out.println(resp);
+  }
 
   @Test
   public void test() {
@@ -35,10 +62,10 @@ public class ChatPromptsTest {
             .setPreferences("未知");
 
     // 模拟对话历史
-    List<UserMsg> conversationHistory = Collections.emptyList();
+    List<UserMsg> conversationHistory = List.of(new UserMsg().setTone("友好、打招呼").setContent("hi"));
 
     // 模拟消息
-    String currentMessage = "你好";
+    String currentMessage = "没怎么";
     // 生成结构化的 Prompt
     ChatRspPrompt prompt = generatePrompt(userInfo, conversationHistory, currentMessage);
     SystemMessage systemMessage = new SystemMessage(JSON.toJSONString(prompt));
@@ -46,7 +73,7 @@ public class ChatPromptsTest {
     String resp = chatModel.call(systemMessage, new UserMessage(currentMessage));
 
     // 打印回复
-    System.out.println(resp);
+    log.info("回复：{}", resp);
   }
 
   // 生成结构化的 Prompt
@@ -58,9 +85,9 @@ public class ChatPromptsTest {
     // 创建响应指导
     ChatRspPrompt.ResponseGuidelines responseGuidelines =
         new ChatRspPrompt.ResponseGuidelines()
-            .setToneDetection("幽默") // 可以根据对话内容自动分析用户的语气
-            .setTopicRelevance("继续") // 判断当前话题是否相关
-            .setNextStep("继续了解用户职业"); // 继续提问用户职业
+            .setToneDetection("打招呼") // 可以根据对话内容自动分析用户的语气
+            .setTopicRelevance("打招呼") // 判断当前话题是否相关
+            .setNextStep("慢慢了解用户"); // 继续提问用户职业
 
     // 创建对话策略
     ChatRspPrompt.DialogStrategy dialogStrategy =
