@@ -1,9 +1,11 @@
 package com.yuegod.chat;
 
 import com.yuegod.chat.agent.ChatRspAgent;
+import com.yuegod.chat.agent.DynamicToneAgent;
 import com.yuegod.chat.db.mongo.entity.UserInfo;
 import com.yuegod.chat.db.mongo.entity.UserMsg;
 import com.yuegod.chat.model.ChatRspPrompt;
+import com.yuegod.chat.model.DynamicTopneResp;
 import jakarta.annotation.Resource;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,20 @@ public class ChatPromptsTest {
   @Resource private ChatModel chatModel;
 
   @Resource private ChatRspAgent chatRspAgent;
+
+  @Resource private DynamicToneAgent dynamicToneAgent;
+
+  @Test
+  public void test3() {
+    List<UserMsg> conversationHistory =
+        List.of(
+            new UserMsg().setTone("友好").setContent("hi"),
+            new UserMsg().setTone("友好").setContent("耍手机"),
+            new UserMsg().setTone("友好").setContent("抖音"));
+
+    DynamicTopneResp resp = dynamicToneAgent.request(conversationHistory);
+    System.out.println(resp);
+  }
 
   @Test
   public void test2() {
