@@ -1,4 +1,4 @@
-package com.yuegod.chat.model;
+package com.yuegod.chat.dto;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

@@ -6,7 +6,7 @@ import com.yuegod.chat.agent.ChatTopicAnalyzeAgent;
 import com.yuegod.chat.db.mongo.entity.UserInfo;
 import com.yuegod.chat.db.mongo.entity.UserMsg;
 import com.yuegod.chat.domain.resp.CreateChatResp;
-import com.yuegod.chat.model.ChatRspPrompt;
+import com.yuegod.chat.dto.ChatRspPrompt;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

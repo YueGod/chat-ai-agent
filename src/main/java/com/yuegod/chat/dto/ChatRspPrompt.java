@@ -1,4 +1,4 @@
-package com.yuegod.chat.model;
+package com.yuegod.chat.dto;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.yuegod.chat.db.mongo.entity.UserInfo;

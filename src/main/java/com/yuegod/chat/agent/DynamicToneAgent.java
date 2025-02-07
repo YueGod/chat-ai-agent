@@ -2,7 +2,7 @@ package com.yuegod.chat.agent;
 
 import com.alibaba.fastjson2.JSON;
 import com.yuegod.chat.db.mongo.entity.UserMsg;
-import com.yuegod.chat.model.DynamicTopneResp;
+import com.yuegod.chat.dto.DynamicTopneResp;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -3,7 +3,8 @@ package com.yuegod.chat.agent;
 import com.alibaba.fastjson2.JSON;
 import com.yuegod.chat.db.mongo.entity.UserInfo;
 import com.yuegod.chat.db.mongo.entity.UserMsg;
-import com.yuegod.chat.model.ChatRspPrompt;
+import com.yuegod.chat.dto.ChatRspPrompt;
+import com.yuegod.chat.model.Llama3Api;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -25,9 +26,12 @@ public class ChatRspAgent {
 
   private final ChatModel chatModel;
 
+  private final Llama3Api llama3Api;
+
   public ChatRspPrompt request(String prompt, String message) {
     log.info("发送消息：{}", prompt);
-    String respStr = chatModel.call(prompt);
+    String respStr = llama3Api.call(prompt, message);
+    log.info(respStr);
     return JSON.parseObject(respStr, ChatRspPrompt.class);
   }
 
