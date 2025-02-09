@@ -4,10 +4,9 @@ import com.yuegod.chat.agent.ChatRspAgent;
 import com.yuegod.chat.agent.DynamicToneAgent;
 import com.yuegod.chat.db.mongo.entity.UserInfo;
 import com.yuegod.chat.db.mongo.entity.UserMsg;
-import com.yuegod.chat.dto.ChatRspPrompt;
-import com.yuegod.chat.dto.DynamicTopneResp;
 import jakarta.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.model.ChatModel;
@@ -29,14 +28,7 @@ public class ChatPromptsTest {
 
   @Test
   public void test3() {
-    List<UserMsg> conversationHistory =
-        List.of(
-            new UserMsg().setTone("友好").setContent("hi"),
-            new UserMsg().setTone("友好").setContent("耍手机"),
-            new UserMsg().setTone("友好").setContent("抖音"));
-
-    DynamicTopneResp resp = dynamicToneAgent.request(conversationHistory);
-    System.out.println(resp);
+    chatRspAgent.getPrompts(null, null, null, null, true);
   }
 
   @Test
@@ -64,13 +56,25 @@ public class ChatPromptsTest {
             new UserMsg().setContent("抖音上最近有追什么热门的挑战或者流行的视频吗？"),
             new UserMsg().setContent("哈哈，没事没事，那就先聊会天吧！最近有什么好玩的事儿吗？"),
             new UserMsg().setContent("哎哟，那就一起想想好玩的事吧，比如最近有没有什么电影或者展览值得去？"));
-    // 模拟消息
-    UserMsg currentMessage = UserMsg.empty(userInfo.getId()).setContent("看了哪吒2");
-    String prompts =
-        chatRspAgent.getPrompts(
-            userInfo, currentMessage, conversationHistory, conversationHistoryReply, true);
-    System.out.println(prompts);
-    ChatRspPrompt resp = chatRspAgent.request(prompts, currentMessage.getContent());
-    System.out.println(resp);
+
+    System.out.println(
+        String.join(
+            "\n",
+            conversationHistory.stream().map(UserMsg::getContent).collect(Collectors.toList())));
+    System.out.println("--------------");
+    System.out.println(
+        String.join(
+            "\n",
+            conversationHistoryReply.stream()
+                .map(UserMsg::getContent)
+                .collect(Collectors.toList())));
+
+    //    // 模拟消息
+    //    UserMsg currentMessage = UserMsg.empty(userInfo.getId()).setContent("看了哪吒2");
+    //    String prompts =
+    //        chatRspAgent.getPrompts(
+    //            userInfo, currentMessage, conversationHistory, conversationHistoryReply, true);
+    //    ChatRspPrompt resp = chatRspAgent.request(prompts, currentMessage.getContent());
+    //    System.out.println(resp);
   }
 }
